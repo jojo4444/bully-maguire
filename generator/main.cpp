@@ -1,6 +1,13 @@
 #include "generator.hpp"
 
 int main() {
-	Generator g(10, 5);
+	int n;
+	std::cin >> n;
+
+	std::random_device d;
+	Generator g(n, d());
+
 	g.write(std::cout);
+
+	return 0;
 }

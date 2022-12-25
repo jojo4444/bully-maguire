@@ -3,19 +3,18 @@
 Solver::Solver() : sz(0), pdata(nullptr) {}
 
 Solver::~Solver() {
-	if (pdata == nullptr)  {
-		return;
+	if (pdata != nullptr)  {
+		delete[] pdata;
 	}
-	delete[] pdata;
 }
 
-void Solver::read(std::istream& file) {
-	file >> sz;
+void Solver::read(std::istream& stream) {
+	stream >> sz;
 	pdata = new std::pair<Point, double>[sz];
 
 	double alpha, phi, d;
 	for (int i = 0; i < sz; ++i) {
-		file >> alpha >> phi >> d;
+		stream >> alpha >> phi >> d;
 		pdata[i].first = Point(alpha, phi);
 		pdata[i].second = d;
 	}

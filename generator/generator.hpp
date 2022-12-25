@@ -1,30 +1,29 @@
 #ifndef GENERATOR_HEADER
 #define GENERATOR_HEADER
 
-#include "point.hpp"
 #include <iostream>
 #include <iomanip>
 #include <random>
 
-using std::ostream;
-using std::uniform_real_distribution;
-using std::mt19937;
-using SpherePoint = std::pair<double, double>;
+#include "point.hpp"
 
+using SpherePoint = std::pair<double, double>;
 
 class Generator {
 public:
-	Generator(size_t n, size_t seed);
+	Generator(int n, uint32_t seed);
 	~Generator();
-	void write(ostream& stream);
+
+	void write(std::ostream& stream) const;
 
 private:
 	void generate();
-	Point convert(const SpherePoint& p);
-	SpherePoint p;
+	SpherePoint genPoint() const;
+
+	int n;
 	SpherePoint* pdata;
-	size_t n;
-	mt19937 rnd;
+	mutable std::mt19937 rnd;
+	SpherePoint result;
 };
 
 #endif
