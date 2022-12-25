@@ -30,14 +30,3 @@ int main() {
 
 	return 0;
 }
-
-/*
-bash:
-for (...) {
-	1. generate > file [last str == answer]
-
-	2. cat file | solver > ans2
-
-	3. compare $(tail -n 1 file) ans2
-}
-*/
