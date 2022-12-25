@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 project(bully-maguire)
 
-add_subdirectory(test)
+add_subdirectory(generator)
 
 add_subdirectory(solution)
 
