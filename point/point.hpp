@@ -42,9 +42,6 @@ struct Point {
 	double len() const;
 };
 
-// угол между векторами [0; PI]
-double angle(const Point& L, const Point& R);
-
 struct Line {
 	Line();
 	Line(const Point& s, const Point& v);
@@ -62,6 +59,9 @@ double det(
 
 // находит решения уравнения ax^2 + bx + c = 0
 vector<double> quadraticEq(double a, double b, double c);
+
+// находит угол между векторами [0; PI]
+double angle(const Point& L, const Point& R);
 
 // пересекает сферу с центром (0, 0, 0) и радиусом R с прямой L
 vector<Point> interSphereLine(double R, const Line& L);
