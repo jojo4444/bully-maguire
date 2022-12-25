@@ -1,21 +1,37 @@
 #include "generator.hpp"
 
-Generator::Generator(size_t n, const mt19937& rnd): n_(n), rnd_(rnd)  {
-	pdata_ = new Point[n_];
+Generator::Generator(size_t n, size_t seed): rnd(seed){
+	this->n = n;
+	pdata = new SpherePoint[n];
 	generate();
 }
 
 Generator::~Generator() {
-	delete pdata_;
+	if (pdata != nullptr){
+		delete[] pdata;
+	}
 }
 
 void Generator::generate(){
-	
+	uniform_real_distribution<> furd(-PI/2, PI/2);
+	uniform_real_distribution<> surd(0., 2 * PI);
+	for (size_t i = 0; i < n; ++i){
+		pdata[i].first = furd(rnd);
+		pdata[i].second = surd(rnd);
+	}
+	p.first = furd(rnd);
+	p.second = surd(rnd);
 }
 
-void Generator::write(iostream stream) {
-	stream << n_ << "\n";
-	for (size_t i = 0; i < n_; ++i){
-		stream << pdata_[i].x << " " << pdata_[i].y << " " << pdata_[i].z << "\n";
+Point Generator::convert(const SpherePoint &p){
+    return Point(p.first, p.second);
+}
+
+void Generator::write(ostream& stream) {
+	Point pd = convert(p);
+	stream << n << "\n";
+	for (size_t i = 0; i < n; ++i){
+		double dist = distOnSphere(1, convert(pdata[i]), pd);
+		stream << std::setprecision(9) << std::fixed << pdata[i].first << " " << pdata[i].second << " " <<  dist << "\n";
 	}
 }

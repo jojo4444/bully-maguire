@@ -3,25 +3,28 @@
 
 #include "point.hpp"
 #include <iostream>
+#include <iomanip>
 #include <random>
 
-using std::iostream;
+using std::ostream;
+using std::uniform_real_distribution;
 using std::mt19937;
-using PolarPoint = std::pair<double, double>;
+using SpherePoint = std::pair<double, double>;
+
 
 class Generator {
 public:
-	Generator(size_t n, const mt19937& rnd);
+	Generator(size_t n, size_t seed);
 	~Generator();
-	void write(iostream stream);
+	void write(ostream& stream);
 
 private:
 	void generate();
-	mt19937 rnd_;
-	Point cpoint_;
-	Point* pdata_;
-	size_t n_;
-
+	Point convert(const SpherePoint& p);
+	SpherePoint p;
+	SpherePoint* pdata;
+	size_t n;
+	mt19937 rnd;
 };
 
 #endif
