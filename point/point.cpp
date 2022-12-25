@@ -8,7 +8,7 @@ Point::Point(double x, double y, double z) {
 	this->z = z;
 }
 
-Point::Point(double aplha, double phi) {
+Point::Point(double alpha, double phi) {
 	double cosAlpha = cos(aplha);
 	x = cosAlpha*cos(phi);
 	y = cosAlpha*sin(phi);
