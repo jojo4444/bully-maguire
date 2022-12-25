@@ -92,7 +92,6 @@ Point Solver::calc() const {
 		}
 		L = Line(p[0], p[1] - p[0]);
 	}
-
 	vector<Point> cands = interSphereLine(1, L);
 
 	if (cands.empty()) {
@@ -113,6 +112,9 @@ Point Solver::calc() const {
 		то ответ неоднозначен, иначе мы рано или поздно найдем точку вне плоскости. 
 	*/
 
+	int id = -1;
+	double deltaDis = -1;
+
 	for (int i = 0; i < sz; ++i) {
 		Point P = pdata[i].first;
 		double realDist = pdata[i].second;
@@ -120,20 +122,21 @@ Point Solver::calc() const {
 		double d1 = distOnSphere(1, P, cands[0]);
 		double d2 = distOnSphere(1, P, cands[1]);
 
-		if (eq(d1, d2)) {
-			// в одной плоскости
-			continue; 
+		double d12 = std::abs(d1 - d2);
+		if (deltaDis < d12) {
+			deltaDis = d12;
+			id = i;
 		}
-
-		return cands[eq(d2, realDist)];
 	}
 
-	/*
-		только, если ответ не однозначный или отсутствует
-
-		считаем, что данные корректны
-	*/
-	return Point();
+	Point P = pdata[id].first;
+	double realDist = pdata[id].second;
+	double d1 = distOnSphere(1, P, cands[0]);
+	double d2 = distOnSphere(1, P, cands[1]);
+	if (std::abs(d1 - realDist) < std::abs(d2 - realDist)) {
+		return cands[0];
+	}
+	return cands[1];
 }
 
 bool Solver::validate(const Point& P) const {
@@ -146,7 +149,8 @@ bool Solver::validate(const Point& P) const {
 	for (int i = 0; i < sz; ++i) {
 		double realDist = pdata[i].second;
 		double dist = distOnSphere(1, P, pdata[i].first);
-		if (!eq(realDist, dist)) {
+		if (std::abs(realDist - dist) > 1e-4) {
+			std::cout << "delta_dist: " << realDist - dist << std::endl;
 			return false;
 		}
 	}

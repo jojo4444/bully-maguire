@@ -9,15 +9,23 @@
 
 using SpherePoint = std::pair<double, double>;
 
+enum class Mode {
+	Random,
+	Section
+};
+
 class Generator {
 public:
 	Generator(int n, uint32_t seed);
 	~Generator();
 
+	void generate(Mode m);
+
+	Point getResult() const;
+
 	void write(std::ostream& stream) const;
 
 private:
-	void generate();
 	SpherePoint genPoint() const;
 
 	int n;

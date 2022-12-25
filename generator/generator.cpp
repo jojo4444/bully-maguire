@@ -1,9 +1,8 @@
 #include "generator.hpp"
 
-Generator::Generator(int n, uint32_t seed): rnd(seed) {
+Generator::Generator(int n, uint32_t seed) : rnd(seed) {
 	this->n = n;
 	pdata = new SpherePoint[n];
-	generate();
 }
 
 Generator::~Generator() {
@@ -12,11 +11,23 @@ Generator::~Generator() {
 	}
 }
 
-void Generator::generate() {
-	for (int i = 0; i < n; ++i) {
-		pdata[i] = genPoint();
+void Generator::generate(Mode m) {
+	if (m == Mode::Random) {
+		for (int i = 0; i < n; ++i) {
+			pdata[i] = genPoint();
+		}
+	} else {
+		double step = 2*PI / n;
+		for (int i = 0; i < n - 1; ++i) {
+			pdata[i] = SpherePoint(0, step * i);
+		}
+		pdata[n - 1] = genPoint();
 	}
 	result = genPoint();
+}
+
+Point Generator::getResult() const {
+	return Point(result.first, result.second);
 }
 
 SpherePoint Generator::genPoint() const {

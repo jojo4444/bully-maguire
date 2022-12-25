@@ -12,8 +12,8 @@ using std::vector;
 using std::cos;
 using std::sin;
 
-const double EPS = 1e-4;
-const double PI = 3.141592653589793238462643;
+const double EPS = 1e-8;
+const double PI = 3.1415926535897932;
 
 struct Point {
 	double x, y, z;

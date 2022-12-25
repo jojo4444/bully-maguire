@@ -1,12 +1,10 @@
+#include <iomanip>
+
 #include "solution.hpp"
 
 /*
 test:
 
-3
-0 0 0.78539816339
-0 1.57079632679 0.78539816339
-1.57079632679 0 1.57079632679
 */
 
 int main() {
@@ -16,11 +14,10 @@ int main() {
 	Point res = s.calc();
 
 	if (!s.validate(res)) {
-		std::cout << "Bad point!\n";
 		return -1;
-	} 
+	}
 
-	std::cout << "Correct point!\n";
+	std::cout << std::setprecision(9) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
 
 	return 0;
 }
