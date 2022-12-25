@@ -10,7 +10,7 @@ public:
 	Solver();
 	~Solver();
 
-	void read(std::istream& file);
+	void read(std::istream& stream);
 
 	Point calc() const;
 	
