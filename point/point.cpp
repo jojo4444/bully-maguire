@@ -9,10 +9,10 @@ Point::Point(double x, double y, double z) {
 }
 
 Point::Point(double alpha, double phi) {
-	double cosAlpha = cos(aplha);
+	double cosAlpha = cos(alpha);
 	x = cosAlpha*cos(phi);
 	y = cosAlpha*sin(phi);
-	z = sin(aplha);
+	z = sin(alpha);
 }
 
 Point Point::operator+(const Point& T) const {return Point(x + T.x, y + T.y, z + T.z);}
