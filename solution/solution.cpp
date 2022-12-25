@@ -6,7 +6,7 @@ Solver::~Solver() {
 	if (pdata == nullptr)  {
 		return;
 	}
-	delete pdata;
+	delete[] pdata;
 }
 
 void Solver::read(std::istream& file) {
