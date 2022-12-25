@@ -8,6 +8,13 @@ Point::Point(double x, double y, double z) {
 	this->z = z;
 }
 
+Point::Point(double aplha, double phi) {
+	double cosAlpha = cos(aplha);
+	x = cosAlpha*cos(phi);
+	y = cosAlpha*sin(phi);
+	z = sin(aplha);
+}
+
 Point Point::operator+(const Point& T) const {return Point(x + T.x, y + T.y, z + T.z);}
 Point Point::operator-(const Point& T) const {return Point(x - T.x, y - T.y, z - T.z);}
 Point Point::operator*(double T) const {return Point(x * T, y * T, z * T);}
@@ -24,6 +31,13 @@ bool Point::operator==(const Point& T) const {
 
 double Point::len() const {
 	return std::sqrt(*this % *this);
+}
+
+double angle(const Point& L, const Point& R) {
+	double cosAlpha = (L % R) / (L.len() * R.len());
+	cosAlpha = std::min(static_cast<double>(1), cosAlpha);
+	cosAlpha = std::max(static_cast<double>(-1), cosAlpha);
+	return std::acos(cosAlpha);
 }
 
 Line::Line() = default;
@@ -77,4 +91,6 @@ vector<Point> interSphereLine(double R, const Line& L) {
 	return res;
 }
 
-
+double distOnSphere(double R, const Point& A, const Point& B) {
+	return angle(A,B)*R;
+}
