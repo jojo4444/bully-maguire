@@ -74,7 +74,7 @@ double angle(const Point& L, const Point& R) {
 	double cosAlpha = (L % R) / (L.len() * R.len());
 	cosAlpha = std::min(static_cast<double>(1), cosAlpha);
 	cosAlpha = std::max(static_cast<double>(-1), cosAlpha);
-	return std::acosl(cosAlpha);
+	return std::acos(cosAlpha);
 }
 
 vector<Point> interSphereLine(double R, const Line& L) {
