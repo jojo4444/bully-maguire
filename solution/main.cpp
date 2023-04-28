@@ -8,16 +8,12 @@ test:
 */
 
 int main() {
-	Solver s;
-	
-	s.read(std::cin);
-	Point res = s.calc();
+    Solver s;
 
-	if (!s.validate(res)) {
-		return -1;
-	}
+    s.read(std::cin);
+    Point res = s.calc();
 
-	std::cout << std::setprecision(9) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
+    std::cout << std::setprecision(18) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
 
-	return 0;
+    return 0;
 }

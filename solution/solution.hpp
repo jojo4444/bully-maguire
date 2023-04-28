@@ -2,23 +2,21 @@
 #define SOLUTION_HEADER
 
 #include <iostream>
+#include <vector>
 
 #include "point.hpp"
 
 class Solver {
 public:
-	Solver();
-	~Solver();
+    Solver() = default;
+    ~Solver() = default;
 
-	void read(std::istream& stream);
+    void read(std::istream& stream);
 
-	Point calc() const;
-	
-	bool validate(const Point& P) const;
+    Point calc() const;
 
 private:
-	int sz;
-	std::pair<Point, double>* pdata;
+    vector<std::pair<Point, double>> pdata;
 };
 
 #endif

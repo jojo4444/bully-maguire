@@ -7,26 +7,26 @@ mode:
 */
 
 Mode getMode(const std::string& mode) {
-	if (mode == "random") {
-		return Mode::Random;
-	}
-	return Mode::Section;
+    if (mode == "random") {
+        return Mode::Random;
+    }
+    return Mode::Section;
 }
 
 int main() {
-	int n;
-	std::string mode;
-	std::cin >> n >> mode;
+    int n;
+    std::string mode;
+    std::cin >> n >> mode;
 
-	std::random_device d;
-	Generator g(n, d());
+    std::random_device d;
+    Generator g(n, d());
 
-	g.generate(getMode(mode));
+    g.generate(getMode(mode));
 
-	g.write(std::cout);
+    g.write(std::cout);
 
-	Point res = g.getResult();
-	std::cout << std::setprecision(9) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
+    Point res = g.getResult();
+    std::cout << std::setprecision(18) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
 
-	return 0;
+    return 0;
 }

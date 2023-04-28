@@ -1,159 +1,100 @@
 #include "solution.hpp"
 
-Solver::Solver() : sz(0), pdata(nullptr) {}
-
-Solver::~Solver() {
-	if (pdata != nullptr)  {
-		delete[] pdata;
-	}
-}
+#include <stdexcept>
 
 void Solver::read(std::istream& stream) {
-	stream >> sz;
-	pdata = new std::pair<Point, double>[sz];
+    int sz;
+    stream >> sz;
 
-	double alpha, phi, d;
-	for (int i = 0; i < sz; ++i) {
-		stream >> alpha >> phi >> d;
-		pdata[i].first = Point(alpha, phi);
-		pdata[i].second = d;
-	}
+    if (sz < 3) {
+        throw std::logic_error("small amount of data (requires at least 3)");
+    }
+
+    pdata.resize(sz);
+
+    double alpha, phi, d;
+    for (int i = 0; i < sz; ++i) {
+        stream >> alpha >> phi >> d;
+        pdata[i].first = Point(alpha, phi);
+        pdata[i].second = d;
+    }
 }
 
 Point Solver::calc() const {
-	Point O1 = pdata[0].first;
-	double r1 = pdata[0].second;
+    /*
+            p - ответ
 
-	Point O2 = pdata[1].first;
-	double r2 = pdata[1].second;
+            скалярная система
 
-	// противоположные точки недопустимы
-	if (O1 + O2 == Point(0, 0, 0)) {
-		O2 = pdata[2].first;
-		r2 = pdata[2].second;
-	}
+            p % O1 = g1
+            p % O2 = g2
+            p % O3 = g3
 
-	double r1_sqr = std::max(static_cast<double>(0), 2 - 2*cos(r1));
-	double r2_sqr = std::max(static_cast<double>(0), 2 - 2*cos(r2));
+            это система плоскостей
 
-	double g1 = ((O1 % O1) - r1_sqr + 1) / 2; 
-	double g2 = ((O2 % O2) - r2_sqr + 1) / 2;
+            x*O1.x + y*O1.y + z*O1.z = g1
+            x*O2.x + y*O2.y + z*O2.z = g2
+            x*O3.x + y*O3.y + z*O3.z = g3
 
-	/*
-		t - ответ
+            ее решением будет точка, если определитель
+            | O1.x O1.y O1.z|
+            | O2.x O2.y O2.z| = detMax != 0
+            | O3.x O3.y O3.z|
 
-		скалярная система
+            выбор O1, O2, O3 можно сделать так:
+            O1 = pdata[0]
+            O2 = pdata[1]
+            если эти точки не противоположны, то O3 можно найти среди остальных, и для точности |detMax| -> max
+            иначе O2 = pdata[2] и действуем аналогично
+    */
 
-		t % O1 = g1
-		t % O2 = g2
-	
-		это система плоскостей
+    int o1, o2, o3;
+    double detMax = 0;
+    for (int i = 0; i <= 0; ++i) {
+        for (int j = 1; j <= 2; ++j) {
+            for (int k = j + 1; k < pdata.size(); ++k) {
+                Point O1 = pdata[i].first;
+                Point O2 = pdata[j].first;
+                Point O3 = pdata[k].first;
+                double detHere = det33(O1.x, O1.y, O1.z, O2.x, O2.y, O2.z, O3.x, O3.y, O3.z);
 
-		x*O1.x + y*O1.y + z*O1.z = g1
-		x*O2.x + y*O2.y + z*O2.z = g2
-	
-		ее решением будет прямая.
-		
-		Если 
-		| O1.y   O1.z |
-		|             | == 0
-		| O2.y   O2.z |
+                if (std::abs(detHere) > detMax) {
+                    detMax = detHere;
+                    o1 = i;
+                    o2 = j;
+                    o3 = k;
+                }
+            }
+        }
+    }
 
-		то прямая имеет вид (x = const, y = const, z - [-oo, +oo]) 
+    if (eq(detMax, 0)) {
+        throw std::logic_error("not the only solution");
+    }
 
-		иначе `x` принимает все значения [-oo, +oo], и можно найти две точки 
-		при `x` = {0,1}, которые точно существуют. По этим точкам восстановим ответ
+    Point O1 = pdata[o1].first;
+    double r1 = pdata[o1].second;
 
-		Далее пересечем прямую с исходной сферой и найдем точки кандидаты (не более 2)
-	*/
+    Point O2 = pdata[o2].first;
+    double r2 = pdata[o2].second;
 
-	Line L;
+    Point O3 = pdata[o3].first;
+    double r3 = pdata[o3].second;
 
-	double d = det(O1.y, O1.z, O2.y, O2.z);
-	
-	if (eq(d, 0)) {
-		// метод Мрамера
-		double dnew = det(O1.x, O1.y, O2.x, O2.y);
-		double xd = det(g1, O1.y, g2, O2.y);
-		double yd = det(O1.x, g1, O2.x, g2);
-		double x = xd / dnew;
-		double y = yd / dnew;
-		L = Line(Point(x, y, 0), Point(0, 0, 1)); 	
-	} else {
-		Point p[2];
-		for (int x = 0; x <= 1; ++x) {
-			double ng1 = g1 - x*O1.x;
-			double ng2 = g2 - x*O2.x;
-			double yd = det(ng1, O1.z, ng2, O2.z);
-			double zd = det(O1.y, ng1, O2.y, ng2);
-			double y = yd / d;
-			double z = zd / d;
-			p[x] = Point(x, y, z);
-		}
-		L = Line(p[0], p[1] - p[0]);
-	}
-	vector<Point> cands = interSphereLine(1, L);
+    double Rmean2 = Rmean * Rmean;
+    double r1_sqr = std::max<double>(0, 2 * Rmean2 - 2 * Rmean2 * cos(r1 / Rmean));
+    double r2_sqr = std::max<double>(0, 2 * Rmean2 - 2 * Rmean2 * cos(r2 / Rmean));
+    double r3_sqr = std::max<double>(0, 2 * Rmean2 - 2 * Rmean2 * cos(r3 / Rmean));
 
-	if (cands.empty()) {
-		// никогда не должно произойти
-		return Point();
-	}
+    double g1 = ((O1 % O1) - r1_sqr + Rmean2) / 2;
+    double g2 = ((O2 % O2) - r2_sqr + Rmean2) / 2;
+    double g3 = ((O3 % O3) - r3_sqr + Rmean2) / 2;
 
-	if (cands.size() == 1) {
-		// касание прямой и сферы
-		return cands[0];
-	}
+    double detX = det33(g1, O1.y, O1.z, g2, O2.y, O2.z, g3, O3.y, O3.z);
 
-	/*
-		обычный случай с двумя кандидатами на ответ:
+    double detY = det33(O1.x, g1, O1.z, O2.x, g2, O2.z, O3.x, g3, O3.z);
 
-		если точка A лежит в плоскости (O, O1, O2), то это не дает возможности 
-		распознать, какой из кандидатов верный. Если все исходные точки в одной плоскости,
-		то ответ неоднозначен, иначе мы рано или поздно найдем точку вне плоскости. 
-	*/
+    double detZ = det33(O1.x, O1.y, g1, O2.x, O2.y, g2, O3.x, O3.y, g3);
 
-	int id = -1;
-	double deltaDis = -1;
-
-	for (int i = 0; i < sz; ++i) {
-		Point P = pdata[i].first;
-		double realDist = pdata[i].second;
-
-		double d1 = distOnSphere(1, P, cands[0]);
-		double d2 = distOnSphere(1, P, cands[1]);
-
-		double d12 = std::abs(d1 - d2);
-		if (deltaDis < d12) {
-			deltaDis = d12;
-			id = i;
-		}
-	}
-
-	Point P = pdata[id].first;
-	double realDist = pdata[id].second;
-	double d1 = distOnSphere(1, P, cands[0]);
-	double d2 = distOnSphere(1, P, cands[1]);
-	if (std::abs(d1 - realDist) < std::abs(d2 - realDist)) {
-		return cands[0];
-	}
-	return cands[1];
-}
-
-bool Solver::validate(const Point& P) const {
-	// точка на сфере
-	if (!eq(1, P.len())) {
-		return false;
-	}
-
-	// не противоречит исходным данным
-	for (int i = 0; i < sz; ++i) {
-		double realDist = pdata[i].second;
-		double dist = distOnSphere(1, P, pdata[i].first);
-		if (std::abs(realDist - dist) > 1e-4) {
-			std::cout << "delta_dist: " << realDist - dist << std::endl;
-			return false;
-		}
-	}
-
-	return true;
+    return Point(detX / detMax, detY / detMax, detZ / detMax);
 }

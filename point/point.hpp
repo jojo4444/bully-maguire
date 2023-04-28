@@ -1,72 +1,58 @@
 #ifndef POINT_HEADER
 #define POINT_HEADER
 
-/*
-все вычисления проводятся с точностью EPS
-*/
-
-#include <vector>
 #include <cmath>
+#include <vector>
 
-using std::vector;
 using std::cos;
 using std::sin;
+using std::vector;
 
 const double EPS = 1e-8;
 const double PI = 3.1415926535897932;
 
+// https://en.wikipedia.org/wiki/Earth_radius
+const double Rmean = 6371008.8;
+
 struct Point {
-	double x, y, z;
+    double x = 0;
+    double y = 0;
+    double z = 0;
 
-	Point();
-	Point(double x, double y, double z);
+    Point() = default;
+    Point(double x, double y, double z);
 
-	// alpha [-PI/2; PI/2]
-	// phi   [0; 2*PI)
-	// R = 1
-	Point(double alpha, double phi);
-	
-	Point operator+(const Point& T) const;
-	Point operator-(const Point& T) const;
-	Point operator*(double T) const;
+    // alpha [-PI/2; PI/2]
+    // phi   [0; 2*PI)
+    // R = Rmean
+    Point(double alpha, double phi);
 
-	Point& operator+=(const Point& T);
-	Point& operator-=(const Point& T);
-	Point& operator*=(double T);
+    Point operator+(const Point& T) const;
+    Point operator-(const Point& T) const;
+    Point operator*(double T) const;
 
-	// скалярное произведение
-	double operator%(const Point& T) const; 
+    Point& operator+=(const Point& T);
+    Point& operator-=(const Point& T);
+    Point& operator*=(double T);
 
-	bool operator==(const Point& T) const;
+    // скалярное произведение
+    double operator%(const Point& T) const;
 
-	double len() const;
-};
+    bool operator==(const Point& T) const;
 
-struct Line {
-	Line();
-	Line(const Point& s, const Point& v);
-
-	Point s, v;
+    double len() const;
 };
 
 // проверяет |a - b| < EPS
 bool eq(double A, double B);
 
-// вычисляет определитель 2x2
-double det(
-	double a00, double a01,
-	double a10, double a11);
-
-// находит решения уравнения ax^2 + bx + c = 0
-vector<double> quadraticEq(double a, double b, double c);
+// вычисляет определитель 3x3
+double det33(double a00, double a01, double a02, double a10, double a11, double a12, double a20, double a21, double a22);
 
 // находит угол между векторами [0; PI]
 double angle(const Point& L, const Point& R);
 
-// пересекает сферу с центром (0, 0, 0) и радиусом R с прямой L
-vector<Point> interSphereLine(double R, const Line& L);
-
-// находит расстояние на сфере радиуса R между точками A, B
-double distOnSphere(double R, const Point& A, const Point& B);
+// находит расстояние на сфере радиуса Rmean между точками A, B
+double distOnSphere(const Point& A, const Point& B);
 
 #endif
