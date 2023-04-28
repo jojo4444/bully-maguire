@@ -9,7 +9,7 @@ include_directories(../point)
 find_package (GeographicLib REQUIRED)
 include_directories (${GeographicLib_INCLUDE_DIRS})
 
-add_library(sol STATIC solution.cpp)
+add_library(sol STATIC solutionSphere.cpp)
 
 add_executable(solution ${SOURCE_EXE})
 

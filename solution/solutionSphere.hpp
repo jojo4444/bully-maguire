@@ -1,15 +1,15 @@
-#ifndef SOLUTION_HEADER
-#define SOLUTION_HEADER
+#ifndef SOLUTION_SPHERE_HEADER
+#define SOLUTION_SPHERE_HEADER
 
 #include <iostream>
 #include <vector>
 
 #include "point.hpp"
 
-class Solver {
+class SolverSphere {
 public:
-    Solver() = default;
-    ~Solver() = default;
+    SolverSphere() = default;
+    ~SolverSphere() = default;
 
     void read(std::istream& stream);
 

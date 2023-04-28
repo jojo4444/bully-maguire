@@ -1,8 +1,8 @@
-#include "solution.hpp"
+#include "solutionSphere.hpp"
 
 #include <stdexcept>
 
-void Solver::read(std::istream& stream) {
+void SolverSphere::read(std::istream& stream) {
     int sz;
     stream >> sz;
 
@@ -20,7 +20,7 @@ void Solver::read(std::istream& stream) {
     }
 }
 
-Point Solver::calc() const {
+Point SolverSphere::calc() const {
     /*
             p - ответ
 

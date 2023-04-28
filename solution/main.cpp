@@ -1,6 +1,6 @@
 #include <iomanip>
 
-#include "solution.hpp"
+#include "solutionSphere.hpp"
 
 /*
 test:
@@ -8,7 +8,7 @@ test:
 */
 
 int main() {
-    Solver s;
+    SolverSphere s;
 
     s.read(std::cin);
     Point res = s.calc();
