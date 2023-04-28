@@ -1,6 +1,7 @@
 #include <iomanip>
 
-#include "solution.hpp"
+#include "solutionGeoid.hpp"
+#include "solutionSphere.hpp"
 
 /*
 test:
@@ -8,16 +9,15 @@ test:
 */
 
 int main() {
-	Solver s;
-	
-	s.read(std::cin);
-	Point res = s.calc();
+    SolverSphere sphere;
 
-	if (!s.validate(res)) {
-		return -1;
-	}
+    sphere.read(std::cin);
+    Point approach = sphere.calc();
 
-	std::cout << std::setprecision(9) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
+    SolverGeoid geoid(sphere.getData());
+    Point res = geoid.calc(approach);
 
-	return 0;
+    std::cout << std::setprecision(18) << std::fixed << res.x << " " << res.y << " " << res.z << "\n";
+
+    return 0;
 }

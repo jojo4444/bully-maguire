@@ -1,37 +1,31 @@
 #ifndef GENERATOR_HEADER
 #define GENERATOR_HEADER
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <random>
 
 #include "point.hpp"
 
-using SpherePoint = std::pair<double, double>;
-
-enum class Mode {
-	Random,
-	Section
-};
+enum class Mode { Random, Section };
 
 class Generator {
 public:
-	Generator(int n, uint32_t seed);
-	~Generator();
+    Generator(int n, uint32_t seed);
+    ~Generator() = default;
 
-	void generate(Mode m);
+    void generate(Mode m);
 
-	Point getResult() const;
+    Point getResult() const;
 
-	void write(std::ostream& stream) const;
+    void write(std::ostream& stream) const;
 
 private:
-	SpherePoint genPoint() const;
+    GeoPoint genPoint() const;
 
-	int n;
-	SpherePoint* pdata;
-	mutable std::mt19937 rnd;
-	SpherePoint result;
+    vector<GeoPoint> pdata;
+    mutable std::mt19937 rnd;
+    GeoPoint result;
 };
 
 #endif

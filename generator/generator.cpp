@@ -1,47 +1,44 @@
 #include "generator.hpp"
 
-Generator::Generator(int n, uint32_t seed) : rnd(seed) {
-	this->n = n;
-	pdata = new SpherePoint[n];
-}
+#include <GeographicLib/Geodesic.hpp>
 
-Generator::~Generator() {
-	if (pdata != nullptr) {
-		delete[] pdata;
-	}
+Generator::Generator(int n, uint32_t seed)
+    : rnd(seed) {
+    pdata.resize(n);
 }
 
 void Generator::generate(Mode m) {
-	if (m == Mode::Random) {
-		for (int i = 0; i < n; ++i) {
-			pdata[i] = genPoint();
-		}
-	} else {
-		double step = 2*PI / n;
-		for (int i = 0; i < n - 1; ++i) {
-			pdata[i] = SpherePoint(0, step * i);
-		}
-		pdata[n - 1] = genPoint();
-	}
-	result = genPoint();
+    if (m == Mode::Random) {
+        for (auto& p : pdata) {
+            p = genPoint();
+        }
+    } else {
+        double step = 2 * PI / pdata.size();
+        for (size_t i = 0; i + 1 < pdata.size(); ++i) {
+            pdata[i] = GeoPoint(0, step * i);
+        }
+        pdata[pdata.size() - 1] = genPoint();
+    }
+    result = genPoint();
 }
 
 Point Generator::getResult() const {
-	return Point(result.first, result.second);
+    return Point(result.first / 180 * PI, result.second / 180 * PI);
 }
 
-SpherePoint Generator::genPoint() const {
-	std::uniform_real_distribution<double> alpha(-PI/2, PI/2), phi(0., 2*PI);
-	return SpherePoint(alpha(rnd), phi(rnd));
+// Генерация в градусах
+// https://geographiclib.sourceforge.io/C++/doc/classGeographicLib_1_1Geodesic.html#afdca5eb7c37fa2fecf124aecd6c436fd
+// https://geographiclib.sourceforge.io/html/python/interface.html#restrictions-on-the-parameters
+GeoPoint Generator::genPoint() const {
+    std::uniform_real_distribution<double> lat(-90, 90), lon(-180, 180);
+    return GeoPoint(lat(rnd), lon(rnd));
 }
 
 void Generator::write(std::ostream& stream) const {
-	Point res(result.first, result.second);
-	stream << n << "\n";
-	for (size_t i = 0; i < n; ++i) {
-		auto [alpha, phi] = std::tie(pdata[i].first, pdata[i].second);
-		Point here = Point(alpha, phi);
-		double dist = distOnSphere(1, here, res);
-		stream << std::setprecision(9) << std::fixed << alpha << " " << phi << " " <<  dist << "\n";
-	}
+    stream << pdata.size() << "\n";
+    for (size_t i = 0; i < pdata.size(); ++i) {
+        double dist = distOnGeoidDeg(result, pdata[i]);
+        auto [lat, lon] = std::tie(pdata[i].first, pdata[i].second);
+        stream << std::setprecision(18) << std::fixed << lat << " " << lon << " " << dist << "\n";
+    }
 }
