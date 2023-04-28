@@ -2,6 +2,10 @@
 
 #include <stdexcept>
 
+vector<std::pair<Point, double>> SolverSphere::getData() const {
+    return pdata;
+}
+
 void SolverSphere::read(std::istream& stream) {
     int sz;
     stream >> sz;
@@ -12,10 +16,12 @@ void SolverSphere::read(std::istream& stream) {
 
     pdata.resize(sz);
 
-    double alpha, phi, d;
+    double lat, lon, d;
     for (int i = 0; i < sz; ++i) {
-        stream >> alpha >> phi >> d;
-        pdata[i].first = Point(alpha, phi);
+        stream >> lat >> lon >> d;
+        lat = (lat / 180) * PI;
+        lon = (lon / 180) * PI;
+        pdata[i].first = Point(lat, lon);
         pdata[i].second = d;
     }
 }

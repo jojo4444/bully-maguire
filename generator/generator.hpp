@@ -7,8 +7,6 @@
 
 #include "point.hpp"
 
-using SpherePoint = std::pair<double, double>;
-
 enum class Mode { Random, Section };
 
 class Generator {
@@ -23,11 +21,11 @@ public:
     void write(std::ostream& stream) const;
 
 private:
-    SpherePoint genPoint() const;
+    GeoPoint genPoint() const;
 
-    vector<SpherePoint> pdata;
+    vector<GeoPoint> pdata;
     mutable std::mt19937 rnd;
-    SpherePoint result;
+    GeoPoint result;
 };
 
 #endif

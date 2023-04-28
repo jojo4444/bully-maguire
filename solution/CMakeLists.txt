@@ -10,7 +10,10 @@ set(GeographicLib_USE_STATIC_LIBS ON)
 find_package(GeographicLib REQUIRED COMPONENTS STATIC)
 include_directories(${GeographicLib_INCLUDE_DIRS})
 
-add_library(sol STATIC solutionSphere.cpp)
+add_library(sol STATIC 
+    solutionSphere.cpp 
+    solutionGeoid.cpp
+)
 
 add_executable(solution ${SOURCE_EXE})
 

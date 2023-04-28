@@ -11,6 +11,8 @@ public:
     SolverSphere() = default;
     ~SolverSphere() = default;
 
+    vector<std::pair<Point, double>> getData() const;
+
     void read(std::istream& stream);
 
     Point calc() const;

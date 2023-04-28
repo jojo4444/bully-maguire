@@ -8,6 +8,8 @@ using std::cos;
 using std::sin;
 using std::vector;
 
+using GeoPoint = std::pair<double, double>;
+
 const double EPS = 1e-8;
 const double PI = 3.1415926535897932;
 
@@ -19,13 +21,16 @@ struct Point {
     double y = 0;
     double z = 0;
 
+    double lat = 0;
+    double lon = 0;
+
     Point() = default;
     Point(double x, double y, double z);
 
-    // alpha [-PI/2; PI/2]
-    // phi   [0; 2*PI)
+    // lat [-PI/2; PI/2]
+    // lon [-PI;PI]
     // R = Rmean
-    Point(double alpha, double phi);
+    Point(double lat, double lon);
 
     Point operator+(const Point& T) const;
     Point operator-(const Point& T) const;
@@ -54,5 +59,9 @@ double angle(const Point& L, const Point& R);
 
 // находит расстояние на сфере радиуса Rmean между точками A, B
 double distOnSphere(const Point& A, const Point& B);
+
+// находит расстояние на WGS84 между точками A, B
+// A, B заданы через широту/долготу в градусах
+double distOnGeoidDeg(const GeoPoint& A, const GeoPoint& B);
 
 #endif
