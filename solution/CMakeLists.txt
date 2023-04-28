@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(solution)
 
 set(SOURCE_EXE main.cpp)
+set(SOURCE_SHARED solutionExternal.cpp)
 
 include_directories(../point)
 
@@ -14,6 +15,11 @@ add_library(sol STATIC
     solutionSphere.cpp 
     solutionGeoid.cpp
 )
+
+add_library(solextr SHARED ${SOURCE_SHARED})
+
+target_link_libraries(solextr sol point ${GeographicLib_LIBRARIES})
+
 
 add_executable(solution ${SOURCE_EXE})
 
