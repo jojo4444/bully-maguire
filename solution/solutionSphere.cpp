@@ -52,7 +52,7 @@ Point SolverSphere::calc() const {
     double detMax = 0;
     for (int i = 0; i <= 0; ++i) {
         for (int j = 1; j <= 2; ++j) {
-            for (int k = j + 1; k < pdata.size(); ++k) {
+            for (int k = j + 1; k < static_cast<int>(pdata.size()); ++k) {
                 Point O1 = pdata[i].first;
                 Point O2 = pdata[j].first;
                 Point O3 = pdata[k].first;

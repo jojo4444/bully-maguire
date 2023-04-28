@@ -6,8 +6,9 @@ set(SOURCE_EXE main.cpp)
 
 include_directories(../point)
 
-find_package (GeographicLib REQUIRED)
-include_directories (${GeographicLib_INCLUDE_DIRS})
+set(GeographicLib_USE_STATIC_LIBS ON) 
+find_package(GeographicLib REQUIRED COMPONENTS STATIC)
+include_directories(${GeographicLib_INCLUDE_DIRS})
 
 add_library(sol STATIC solutionSphere.cpp)
 
