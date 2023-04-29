@@ -14,6 +14,7 @@ include_directories(${GeographicLib_INCLUDE_DIRS})
 add_library(sol STATIC 
     solutionSphere.cpp 
     solutionGeoid.cpp
+    solutionAstronomicalSphere.cpp
 )
 
 add_library(solextr SHARED ${SOURCE_SHARED})
