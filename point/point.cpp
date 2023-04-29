@@ -1,6 +1,10 @@
 #include "point.hpp"
 
-#include <GeographicLib/Geodesic.hpp>
+// TODO: replace to WGS84
+GeographicLib::Geodesic& Earth() {
+    static GeographicLib::Geodesic earth(Rmean, 0);
+    return earth;
+}
 
 Point::Point(double x, double y, double z)
     : x(x)
@@ -86,8 +90,6 @@ double distOnSphere(const Point& A, const Point& B) {
 
 double distOnGeoidDeg(const GeoPoint& A, const GeoPoint& B) {
     double result;
-    GeographicLib::Geodesic geo(Rmean, 0);
-    geo.Inverse(A.first, A.second, B.first, B.second, result);
-    // GeographicLib::Geodesic::WGS84().Inverse(A.first, A.second, B.first, B.second, result);
+    Earth().Inverse(A.first, A.second, B.first, B.second, result);
     return result;
 }
