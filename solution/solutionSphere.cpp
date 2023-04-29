@@ -2,6 +2,9 @@
 
 #include <stdexcept>
 
+SolverSphere::SolverSphere(vector<std::pair<Point, double>> pdata)
+    : pdata(pdata){}
+
 vector<std::pair<Point, double>> SolverSphere::getData() const {
     return pdata;
 }

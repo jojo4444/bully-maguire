@@ -9,7 +9,10 @@
 class SolverSphere {
 public:
     SolverSphere() = default;
+
     ~SolverSphere() = default;
+
+    SolverSphere(vector<std::pair<Point, double>>);
 
     vector<std::pair<Point, double>> getData() const;
 
