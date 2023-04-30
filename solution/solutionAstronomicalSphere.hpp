@@ -10,7 +10,7 @@ class SolverAstronomicalSphere {
 public:
     /*
         phi - широта наблюдателя
-        delta - угол склонения (от небесного экватора) 
+        delta - угол склонения (от небесного экватора)
         t - часовой угол светила
     */
     struct CelestialSpherePoint {

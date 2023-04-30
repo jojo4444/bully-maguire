@@ -30,17 +30,17 @@ Point SolverAstronomicalSphere::calc() const {
     for (int i = 0; i < pdata.size(); ++i) {
 
         delta = (pdata[i].delta / 180) * PI; // lat
-        t = (pdata[i].t / 180) * PI; //lon
+        t = (pdata[i].t / 180) * PI;         // lon
         phi = (pdata[i].phi / 180) * PI;
-        
-        /* 
-         * sin(h) - синус высоты 
+
+        /*
+         * sin(h) - синус высоты
          * sin(h) = sin(phi) * sin(delta) + cos(phi) * cos(delta) * cos(t)
-        */
+         */
         hsin = sin(phi) * sin(delta) + cos(phi) * cos(delta) * cos(t);
         hsin = std::max<double>(-1, std::min<double>(1, hsin));
         d = (PI - asin(hsin)) * Rmean;
-        
+
         v[i].first = Point(delta, t);
         v[i].second = d;
     }

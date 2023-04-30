@@ -1,23 +1,23 @@
+#include "solutionAstronomicalSphere.hpp"
 #include "solutionGeoid.hpp"
 #include "solutionSphere.hpp"
-#include "solutionAstronomicalSphere.hpp"
 
 #include <vector>
 
 using std::vector, std::pair;
 
 extern "C" {
-    struct DllPolarСircle {
-        double lat, lon, d;
-    };
+struct DllPolarСircle {
+    double lat, lon, d;
+};
 
-    struct DllCelestialSpherePoint {
-        double phi, delta, t;
-    };
+struct DllCelestialSpherePoint {
+    double phi, delta, t;
+};
 
-    struct DllPoint {
-        double x, y, z;
-    };
+struct DllPoint {
+    double x, y, z;
+};
 }
 
 extern "C" __declspec(dllexport) int __cdecl pharosCalc(int n, DllPolarСircle* in, DllPoint* out) {
