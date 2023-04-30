@@ -17,10 +17,10 @@ add_library(sol STATIC
     solutionAstronomicalSphere.cpp
 )
 
-add_library(solextr SHARED ${SOURCE_SHARED})
-
-target_link_libraries(solextr sol point ${GeographicLib_LIBRARIES})
-
+if(NOT UNIX)
+    add_library(solextr SHARED ${SOURCE_SHARED})
+    target_link_libraries(solextr sol point ${GeographicLib_LIBRARIES})
+endif()
 
 add_executable(solution ${SOURCE_EXE})
 
