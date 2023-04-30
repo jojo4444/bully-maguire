@@ -10,7 +10,6 @@ test:
 
 int main() {
     SolverSphere sphere;
-
     sphere.read(std::cin);
     Point approach = sphere.calc();
 

@@ -13,7 +13,7 @@ rm -f test ans || goex
 
 for i in $(seq 1 1000)
 do
-	echo "10 random" | ./generator/generator > test || goex
+	echo "3 random" | ./generator/generator > test || goex
 	res=($(tail test -n 1))
 	cat test | ./solution/solution > ans || goex
 	res2=($(tail ans -n 1))

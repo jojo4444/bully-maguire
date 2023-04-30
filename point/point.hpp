@@ -4,10 +4,15 @@
 #include <cmath>
 #include <vector>
 
+#include <GeographicLib/Geodesic.hpp>
+
 using std::cos;
 using std::sin;
 using std::vector;
 
+// <lat, lon>
+// lat [-90; 90]
+// lon [-180; 180]
 using GeoPoint = std::pair<double, double>;
 
 const double EPS = 1e-8;
@@ -15,6 +20,8 @@ const double PI = 3.1415926535897932;
 
 // https://en.wikipedia.org/wiki/Earth_radius
 const double Rmean = 6371008.8;
+
+GeographicLib::Geodesic& Earth();
 
 struct Point {
     double x = 0;
