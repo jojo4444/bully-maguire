@@ -17,8 +17,10 @@ public:
     Point calc(Point approach) const;
 
 private:
-    // возвращает геодезическую кривую относительно i точки pdata
-    GeographicLib::GeodesicLine getGeoLine(int i) const;
+    // возвращает ближайшую к P точку на кривой, точки которой равноудалены от C на s
+    //
+    // O(log(eps^-1))
+    GeoPoint getNearest(GeoPoint C, double s, GeoPoint P) const;
 
     vector<std::pair<Point, double>> pdata;
 };
