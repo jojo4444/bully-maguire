@@ -65,9 +65,10 @@ type
   //    в соответствии с этой таблицей создаются соответсвующие run-объекты   //
   //**************************************************************************//
 const
-  ClassTable:array[0..0] of TClassRecord =
+  ClassTable:array[0..1] of TClassRecord =
   (
-    (Name:'navigation';     RunClass:Navigation)
+    (Name:'pharos';         RunClass:TPharosNavigation),
+    (Name:'astronomical';     RunClass:TAstronomicalNavigation)
   );
 
 

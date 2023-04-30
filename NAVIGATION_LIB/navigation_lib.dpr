@@ -4,7 +4,6 @@
   {$MODE Delphi}
 {$ENDIF}
 
-
 uses
   simmm,
   Classes,
